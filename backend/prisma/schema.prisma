@@ -18,8 +18,60 @@ model User {
   name      String   @db.VarChar(60)
   email     String   @unique @db.VarChar(255)
   password  String
-
+  
+  address   String   @db.VarChar(400)
+  role      Role     @default(USER)  
+  refreshToken String? 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  
+  // A user can own one store (if role is STORE_OWNER)
+  store     Store?
+  ratings      Rating[]  
+
+  // A user can submit many ratings
+  @@map("users")
 }
 
+enum Role {
+  ADMIN
+  USER
+  STORE_OWNER
+}
+
+model Store {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(60)
+  email     String   @unique @db.VarChar(255)
+  address   String   @db.VarChar(400)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Store belongs to one Store Owner (User)
+  ownerId   Int      @unique @map("owner_id")
+  owner     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  // Store can have many ratings
+  ratings   Rating[]
+
+  @@map("stores")
+}
+
+model Rating {
+  id        Int      @id @default(autoincrement())
+  value     Int      // 1 to 5
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Rating belongs to a User
+  userId    Int      @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Rating belongs to a Store
+  storeId   Int      @map("store_id")
+  store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  // One user can only rate a store once
+  @@unique([userId, storeId])
+  @@map("ratings")
+}
