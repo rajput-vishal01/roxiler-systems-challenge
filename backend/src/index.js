@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import prisma from "../src/lib/db.js";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth.route.js";
+import adminRouter from "./routes/admin.route.js";
 
 dotenv.config();
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api", authRouter);
+app.use("/api/admin", adminRouter);
 
 const start = async () => {
   try {
