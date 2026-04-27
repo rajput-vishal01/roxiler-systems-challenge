@@ -28,6 +28,14 @@ const Navbar = () => {
     return "/";
   };
 
+  const getPasswordLink = () => {
+    if (user?.role === "USER") return "/user/password";
+    if (user?.role === "STORE_OWNER") return "/store-owner/password";
+    return null;
+  };
+
+  const passwordLink = getPasswordLink();
+
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur">
       <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
@@ -49,6 +57,15 @@ const Navbar = () => {
               >
                 Dashboard
               </Link>
+
+              {passwordLink && (
+                <Link
+                  to={passwordLink}
+                  className="h-8 px-3 rounded-lg text-[13px] text-muted-foreground hover:text-foreground hover:bg-muted transition-colors flex items-center cursor-pointer"
+                >
+                  Password
+                </Link>
+              )}
 
               <div className="w-px h-4 bg-border mx-1" />
 

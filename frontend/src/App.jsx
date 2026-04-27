@@ -9,6 +9,8 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import AdminUsers from "./pages/admin/Users";
 import AdminUserDetail from "./pages/admin/UserDetail";
 import AdminStores from "./pages/admin/Stores";
+import UserStores from "./pages/user/Stores";
+import UserUpdatePassword from "./pages/user/UpdatePassword";
 
 const Unauthorized = () => (
   <div className="p-8 text-center">
@@ -57,6 +59,23 @@ const App = () => {
               element={
                 <ProtectedRoute allowedRoles={["ADMIN"]}>
                   <AdminStores />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/user/stores"
+              element={
+                <ProtectedRoute allowedRoles={["USER"]}>
+                  <UserStores />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/user/password"
+              element={
+                <ProtectedRoute allowedRoles={["USER"]}>
+                  <UserUpdatePassword />
                 </ProtectedRoute>
               }
             />
