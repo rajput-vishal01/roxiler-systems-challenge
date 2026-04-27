@@ -82,14 +82,20 @@ export const signup = async (req, res) => {
 
     const { accessToken, refreshToken } = await issueTokens(user);
 
-    // replaces User.findById().select('-password -refreshToken')
-    const { password: _, refreshToken: __, ...safeUser } = user;
+    const safeUser = await prisma.user.findUnique({
+      where: { id: user.id },
+      select: { id: true, name: true, email: true, address: true, role: true },
+    });
 
     return res
       .status(201)
       .cookie("accessToken", accessToken, cookieOptions)
       .cookie("refreshToken", refreshToken, cookieOptions)
-      .json({ message: "User Created Successfully", user: safeUser });
+      .json({
+        message: "User Created Successfully",
+        user: safeUser,
+        accessToken,
+      });
   } catch (error) {
     console.error("Error in signup:", error);
     return res
@@ -116,13 +122,20 @@ export const login = async (req, res) => {
 
     const { accessToken, refreshToken } = await issueTokens(user);
 
-    const { password: _, refreshToken: __, ...safeUser } = user;
+    const safeUser = await prisma.user.findUnique({
+      where: { id: user.id },
+      select: { id: true, name: true, email: true, address: true, role: true },
+    });
 
     return res
       .status(200)
       .cookie("accessToken", accessToken, cookieOptions)
       .cookie("refreshToken", refreshToken, cookieOptions)
-      .json({ message: "User logged in successfully", user: safeUser });
+      .json({
+        message: "User logged in successfully",
+        user: safeUser,
+        accessToken,
+      });
   } catch (error) {
     console.error("Error in login:", error);
     return res
