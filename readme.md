@@ -1,3 +1,5 @@
+![Roxiler Systems](./screenshot-of-app/home/Screenshot%20(77).png)
+
 # Roxiler Systems — Store Rating Platform
 
 A full-stack web application where users can discover and rate stores, store owners can track their ratings, and admins can manage the entire platform.
