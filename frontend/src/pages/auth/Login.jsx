@@ -29,7 +29,19 @@ const Login = () => {
       setError("");
       const res = await api.post("/login", data);
       const { user, accessToken } = res.data;
+
+      // console.log("1. res.data:", res.data);
+      // console.log("2. accessToken from res:", accessToken);
+      // console.log("3. user.role:", user?.role);
+
       setAuth(user, accessToken);
+
+      // console.log("4. store after setAuth:", useAuthStore.getState());
+      // console.log(
+      //   "5. accessToken in store:",
+      //   useAuthStore.getState().accessToken,
+      // );
+      // console.log("6. hasHydrated:", useAuthStore.persist.hasHydrated());
 
       if (user.role === "ADMIN") navigate("/admin/dashboard");
       else if (user.role === "USER") navigate("/user/stores");

@@ -6,12 +6,17 @@ export const useAuthStore = create(
     (set) => ({
       user: null,
       accessToken: null,
-
       setAuth: (user, accessToken) => set({ user, accessToken }),
       clearAuth: () => set({ user: null, accessToken: null }),
     }),
     {
-      name: "auth-storage", // persists in localStorage
+      name: "auth-storage",
+      onRehydrateStorage: () => (state) => {
+        state._hasHydrated = true;
+      },
     },
   ),
 );
+
+// Expose hydration check outside of React
+export const useHydrated = () => useAuthStore.persist.hasHydrated();
